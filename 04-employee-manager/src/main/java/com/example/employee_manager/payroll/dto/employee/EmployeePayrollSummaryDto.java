@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class EmployeePayrollSummaryDto {
-    private Long id;
     private PayrollPeriodDto payrollPeriod;
     private BigDecimal grossPay;
     private BigDecimal netPay;
@@ -16,13 +15,6 @@ public class EmployeePayrollSummaryDto {
     private List<DeductionDto> deductionDtos;
     private String notes;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public PayrollPeriodDto getPayrollPeriod() {
         return payrollPeriod;

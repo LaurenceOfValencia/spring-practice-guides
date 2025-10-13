@@ -18,16 +18,17 @@ public class Allowance {
     @JsonIgnore
     private PayrollRecord payrollRecord;
 
-    private String type;
+    @Column(name = "type", nullable = false)
+    private String name;
     private BigDecimal amount;
 
     public Allowance() {
     }
 
-    public Allowance(long id, PayrollRecord payrollRecord, String type, BigDecimal amount) {
+    public Allowance(long id, PayrollRecord payrollRecord, String name, BigDecimal amount) {
         this.id = id;
         this.payrollRecord = payrollRecord;
-        this.type = type;
+        this.name = name;
         this.amount = amount;
     }
 
@@ -47,12 +48,12 @@ public class Allowance {
         this.payrollRecord = payrollRecord;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public BigDecimal getAmount() {

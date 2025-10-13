@@ -46,7 +46,8 @@ public class EmployeeManagerApplication {
  *  Problem : App is returning null records when collecting records by payroll periods									__SOLVED__
  * GET /api/payroll-summary/period?startDate=2025-08-01&endDate=2025-08-15
  *
- * 	Problem : Must return a list, the current implementation is returning the first one it can find
+ * 	Problem : Must return a list, the current implementation is returning the first one it can find						__SOLVED__
+ *
  *
  *
  */

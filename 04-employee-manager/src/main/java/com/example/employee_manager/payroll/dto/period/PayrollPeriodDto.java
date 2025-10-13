@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PayrollPeriodDto {
 
-    private Long id;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -14,14 +13,6 @@ public class PayrollPeriodDto {
 
     public String getPeriod() {
         return startDate + " to " + endDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getStartDate() {

@@ -10,7 +10,7 @@ INSERT INTO payroll_periods(start_date, end_date, status) VALUES ('2025-10-16', 
 INSERT INTO payroll_periods(start_date, end_date, status) VALUES ('2025-11-01', '2025-11-15', 'OPEN');
 INSERT INTO payroll_periods(start_date, end_date, status) VALUES ('2025-11-16', '2025-11-30', 'OPEN');
 INSERT INTO payroll_periods(start_date, end_date, status) VALUES ('2025-12-01', '2025-12-15', 'OPEN');
-INSERT INTO payroll_periods(start_date, end_date, status) VALUES ('2025-11-16', '2025-11-31', 'OPEN');
+INSERT INTO payroll_periods(start_date, end_date, status) VALUES ('2025-12-16', '2025-12-31', 'OPEN');
 
 
 INSERT INTO payroll_records(period_id, employee_id, gross_pay, net_pay, payment_date) VALUES (1, 1, 8020.23, 7555.32, '2025-08-15');

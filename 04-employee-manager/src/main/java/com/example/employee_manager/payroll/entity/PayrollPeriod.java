@@ -28,7 +28,7 @@ public class PayrollPeriod {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @OneToMany(mappedBy = "id")
@@ -36,7 +36,8 @@ public class PayrollPeriod {
     private List<PayrollRecord> payrollRecords;
 
     public enum Status {
-        OPEN, CLOSED
+        OPEN,
+        CLOSED
     }
 
     public PayrollPeriod() {}

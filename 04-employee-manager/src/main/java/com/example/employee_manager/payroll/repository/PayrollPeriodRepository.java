@@ -13,5 +13,5 @@ public interface PayrollPeriodRepository extends JpaRepository<PayrollPeriod, Lo
 
     List<PayrollPeriod> findByStatus(PayrollPeriod.Status status);
 
-    Optional<PayrollPeriod> findByStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
+    List<PayrollPeriod> findByStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
 }
