@@ -1,5 +1,6 @@
 package com.example.employee_manager.payroll.mapper;
 
+import com.example.employee_manager.employee.entity.Employee;
 import com.example.employee_manager.payroll.dto.summary.EmployeePayrollDto;
 import com.example.employee_manager.payroll.dto.summary.EmployeePayrollSummaryDto;
 import com.example.employee_manager.payroll.dto.summary.PayrollPeriodSummaryDto;
@@ -21,15 +22,31 @@ public class PayrollSummaryMapper {
      * use EmployeePayrollRecordDto
      */
 
-    public EmployeePayrollSummaryDto toDtoEmployeePayrollSummary(List<PayrollRecord> records) {
-        // check nulls
+    public EmployeePayrollSummaryDto toDtoEmployeePayrollSummary(Employee e, List<PayrollRecord> records) {
+        if (e == null || records == null) {
+            return null;
+        }
 
-
-        return null;
+        EmployeePayrollSummaryDto dto = new EmployeePayrollSummaryDto();
+        dto.setId(e.getId());
+        dto.setName(e.getName());
+        dto.setPayrollRecords(records.stream().map(this::toDtoEmployeeSummaryPayroll).toList());
+        return dto;
     }
 
-    public EmployeePayrollDto toDtoEmployeeSummaryPayroll(PayrollRecord record) {
-        return null;
+    public EmployeePayrollDto toDtoEmployeeSummaryPayroll(PayrollRecord r) {
+        if (r == null) {
+            return null;
+        }
+
+        EmployeePayrollDto dto = new EmployeePayrollDto();
+        dto.setPayrollPeriod(r.getPeriod().toString());
+        dto.setGrossPay(r.getGrossPay());
+        dto.setTotalDeductions(r.getDeductionList().stream().map(Deduction::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add));
+        dto.setTotalAllowances(r.getAllowanceList().stream().map(Allowance::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add));
+        dto.setNetPay(r.getNetPay());
+
+        return dto;
     }
 
     /**

@@ -8,17 +8,17 @@ import java.math.BigDecimal;
  * Child component to EmployeePayrollSummary (payrolls grouped by employee)
  */
 public class EmployeePayrollDto {
-    private PayrollPeriodDto payrollPeriod;
+    private String payrollPeriod;
     private BigDecimal grossPay;
     private BigDecimal totalDeductions;
     private BigDecimal totalAllowances;
     private BigDecimal netPay;
 
-    public PayrollPeriodDto getPayrollPeriod() {
+    public String getPayrollPeriod() {
         return payrollPeriod;
     }
 
-    public void setPayrollPeriod(PayrollPeriodDto payrollPeriod) {
+    public void setPayrollPeriod(String payrollPeriod) {
         this.payrollPeriod = payrollPeriod;
     }
 

@@ -1,6 +1,9 @@
 package com.example.employee_manager.payroll.service;
 
+import com.example.employee_manager.employee.entity.Employee;
+import com.example.employee_manager.employee.repository.EmployeeRepository;
 import com.example.employee_manager.payroll.dto.record.PayrollRecordDto;
+import com.example.employee_manager.payroll.dto.summary.EmployeePayrollSummaryDto;
 import com.example.employee_manager.payroll.dto.summary.PayrollPeriodSummaryDto;
 import com.example.employee_manager.payroll.entity.PayrollPeriod;
 import com.example.employee_manager.payroll.entity.PayrollRecord;
@@ -12,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -24,6 +26,8 @@ public class PayrollRecordService {
     PayrollSummaryMapper payrollSummaryMapper;
     @Autowired
     PayrollRecordRepository payrollRecordRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
     @Autowired
     PayrollPeriodRepository periodRepository;
     /**
@@ -55,7 +59,7 @@ public class PayrollRecordService {
                 .toList();
     }
 
-    public PayrollPeriodSummaryDto getPayrollRecordsByPeriodSummary(LocalDate periodStart, LocalDate periodEnd) {
+    public PayrollPeriodSummaryDto getPayrollSummaryByPeriod(LocalDate periodStart, LocalDate periodEnd) {
         PayrollPeriod period = periodRepository.findByStartDateAndEndDate(periodStart, periodEnd);
         List<PayrollRecord> records = payrollRecordRepository.findByPeriodId(period.getId());
         return payrollSummaryMapper.toDtoPeriodSummary(period, records);
@@ -64,6 +68,18 @@ public class PayrollRecordService {
     /**
      * find by employee
      */
+
+    public List<PayrollRecordDto> getPayrollRecordsByEmployee(Long id) {
+        return payrollRecordRepository.findByEmployeeId(id)
+                .stream()
+                .map(payrollMapper::toDto)
+                .toList();
+    }
+
+    public EmployeePayrollSummaryDto getPayrollSummaryByEmployee(Long id) {
+        Employee e = employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No employee found for id: " + id));
+        return payrollSummaryMapper.toDtoEmployeePayrollSummary(e, payrollRecordRepository.findByEmployeeId(id));
+    }
 
 
 //    public PayrollRecordDto updatePayrollRecord(Long id, PayrollRecordDto updatedPayrollRecord) {

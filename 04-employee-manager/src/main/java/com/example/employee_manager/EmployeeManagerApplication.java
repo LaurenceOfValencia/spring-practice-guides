@@ -47,7 +47,7 @@ public class EmployeeManagerApplication {
  *  GET /api/payroll-summary/period?startDate=2025-08-01&endDate=2025-08-15
  *
  * 	Problem : Must return a list, the current implementation is returning the first one it can find						__SOLVED__
- * 	Task : getPayrollRecordsByPeriod must return a dto that is appropriate for a summary
+ * 	Task : getPayrollRecordsByPeriod must return a dto that is appropriate for a summary								__SOLVED__
  *  Problem : Implement getting records by Employee
  *
  *

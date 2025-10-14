@@ -4,24 +4,24 @@ import java.util.List;
 
 public class EmployeePayrollSummaryDto {
 
-    private Long employeeId;
-    private String employeeName;
+    private Long id;
+    private String name;
     private List<EmployeePayrollDto> payrollRecords;
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public Long getId() {
+        return id;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
+    public String getName() {
+        return name;
     }
 
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<EmployeePayrollDto> getPayrollRecords() {

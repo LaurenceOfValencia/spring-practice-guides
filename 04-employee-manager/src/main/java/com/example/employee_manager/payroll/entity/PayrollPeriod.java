@@ -88,4 +88,9 @@ public class PayrollPeriod {
     public void setPayrollRecords(List<PayrollRecord> payrollRecords) {
         this.payrollRecords = payrollRecords;
     }
+
+    @Override
+    public String toString() {
+        return startDate + " -> " + endDate;
+    }
 }
