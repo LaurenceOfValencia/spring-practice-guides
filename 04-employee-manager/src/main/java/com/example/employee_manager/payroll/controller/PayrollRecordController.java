@@ -18,7 +18,7 @@ public class PayrollRecordController {
     @Autowired
     private PayrollRecordService service;
 
-    @GetMapping("/period-summary")
+    @GetMapping("/period")
     public ResponseEntity<List<PayrollRecordDto>> findRecordsByPeriod(
             @RequestParam("startDate") LocalDate startDate,
             @RequestParam("endDate") LocalDate endDate) {

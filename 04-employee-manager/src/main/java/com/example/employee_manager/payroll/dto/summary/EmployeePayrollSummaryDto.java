@@ -1,14 +1,12 @@
-package com.example.employee_manager.payroll.dto.employee;
-
-import jakarta.persistence.ManyToOne;
+package com.example.employee_manager.payroll.dto.summary;
 
 import java.util.List;
 
-public class EmployeePayrollRecordDto {
+public class EmployeePayrollSummaryDto {
 
     private Long employeeId;
     private String employeeName;
-    private List<EmployeePayrollSummaryDto> payrollRecords;
+    private List<EmployeePayrollDto> payrollRecords;
 
     public Long getEmployeeId() {
         return employeeId;
@@ -26,11 +24,11 @@ public class EmployeePayrollRecordDto {
         this.employeeName = employeeName;
     }
 
-    public List<EmployeePayrollSummaryDto> getPayrollRecords() {
+    public List<EmployeePayrollDto> getPayrollRecords() {
         return payrollRecords;
     }
 
-    public void setPayrollRecords(List<EmployeePayrollSummaryDto> payrollRecords) {
+    public void setPayrollRecords(List<EmployeePayrollDto> payrollRecords) {
         this.payrollRecords = payrollRecords;
     }
 }

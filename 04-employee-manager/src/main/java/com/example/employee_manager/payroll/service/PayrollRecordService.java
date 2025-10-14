@@ -1,9 +1,11 @@
 package com.example.employee_manager.payroll.service;
 
 import com.example.employee_manager.payroll.dto.record.PayrollRecordDto;
+import com.example.employee_manager.payroll.dto.summary.PayrollPeriodSummaryDto;
 import com.example.employee_manager.payroll.entity.PayrollPeriod;
 import com.example.employee_manager.payroll.entity.PayrollRecord;
 import com.example.employee_manager.payroll.mapper.PayrollRecordMapper;
+import com.example.employee_manager.payroll.mapper.PayrollSummaryMapper;
 import com.example.employee_manager.payroll.repository.PayrollPeriodRepository;
 import com.example.employee_manager.payroll.repository.PayrollRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import java.util.NoSuchElementException;
 public class PayrollRecordService {
     @Autowired
     PayrollRecordMapper payrollMapper;
+    @Autowired
+    PayrollSummaryMapper payrollSummaryMapper;
     @Autowired
     PayrollRecordRepository payrollRecordRepository;
     @Autowired
@@ -44,22 +48,23 @@ public class PayrollRecordService {
      * Find by period
      */
     public List<PayrollRecordDto> getPayrollRecordsByPeriod(LocalDate periodStart, LocalDate periodEnd) {
-        // get list of periods that have the same start and end
-        List<PayrollPeriod> matchingPeriods = periodRepository.findByStartDateAndEndDate(periodStart, periodEnd);
-        System.out.println(matchingPeriods);
-        ArrayList<PayrollRecordDto> records = new ArrayList<>();
-        // iterate
-        // For every matching period, it must get all the records associated
-        for (PayrollPeriod period: matchingPeriods) {
-            records.addAll(payrollRecordRepository.findByPeriodId(period.getId())
-                    .stream()
-                    .map(payrollMapper::toDto)
-                    .toList());
-        }
-        return records;
+        PayrollPeriod period = periodRepository.findByStartDateAndEndDate(periodStart, periodEnd);
+        return payrollRecordRepository.findByPeriodId(period.getId())
+                .stream()
+                .map(payrollMapper::toDto)
+                .toList();
     }
 
-    // find by employee
+    public PayrollPeriodSummaryDto getPayrollRecordsByPeriodSummary(LocalDate periodStart, LocalDate periodEnd) {
+        PayrollPeriod period = periodRepository.findByStartDateAndEndDate(periodStart, periodEnd);
+        List<PayrollRecord> records = payrollRecordRepository.findByPeriodId(period.getId());
+        return payrollSummaryMapper.toDtoPeriodSummary(period, records);
+    }
+
+    /**
+     * find by employee
+     */
+
 
 //    public PayrollRecordDto updatePayrollRecord(Long id, PayrollRecordDto updatedPayrollRecord) {
 //        PayrollRecord update = repository.findById(id)

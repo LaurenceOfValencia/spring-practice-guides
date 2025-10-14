@@ -44,10 +44,11 @@ public class EmployeeManagerApplication {
  *
  *  Problem : App is not displaying the correct deductions and allowances for the corresponding record					__SOLVED__
  *  Problem : App is returning null records when collecting records by payroll periods									__SOLVED__
- * GET /api/payroll-summary/period?startDate=2025-08-01&endDate=2025-08-15
+ *  GET /api/payroll-summary/period?startDate=2025-08-01&endDate=2025-08-15
  *
  * 	Problem : Must return a list, the current implementation is returning the first one it can find						__SOLVED__
- *
+ * 	Task : getPayrollRecordsByPeriod must return a dto that is appropriate for a summary
+ *  Problem : Implement getting records by Employee
  *
  *
  */
