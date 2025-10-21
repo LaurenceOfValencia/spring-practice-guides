@@ -22,7 +22,7 @@ public class EmployeeMapper {
         Employee employee = new Employee();
         employee.setName(dto.getName());
         employee.setPosition(dto.getPosition());
-        employee.setDate_hired(LocalDate.parse(dto.getDateHired(), DateTimeFormatter.ISO_LOCAL_DATE));
+        employee.setDate_hired(dto.getDateHired());
         employee.setPosition(dto.getPosition());
         employee.setActive(dto.isActive());
         return employee;

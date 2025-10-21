@@ -2,9 +2,14 @@ package com.example.employee_manager.payroll.service;
 
 import com.example.employee_manager.employee.entity.Employee;
 import com.example.employee_manager.employee.repository.EmployeeRepository;
+import com.example.employee_manager.payroll.dto.component.AllowanceDto;
+import com.example.employee_manager.payroll.dto.component.DeductionDto;
+import com.example.employee_manager.payroll.dto.record.PayrollRecordCreateDto;
 import com.example.employee_manager.payroll.dto.record.PayrollRecordDto;
 import com.example.employee_manager.payroll.dto.summary.EmployeePayrollSummaryDto;
 import com.example.employee_manager.payroll.dto.summary.PayrollPeriodSummaryDto;
+import com.example.employee_manager.payroll.entity.Allowance;
+import com.example.employee_manager.payroll.entity.Deduction;
 import com.example.employee_manager.payroll.entity.PayrollPeriod;
 import com.example.employee_manager.payroll.entity.PayrollRecord;
 import com.example.employee_manager.payroll.mapper.PayrollRecordMapper;
@@ -14,7 +19,9 @@ import com.example.employee_manager.payroll.repository.PayrollRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -33,13 +40,39 @@ public class PayrollRecordService {
     /**
      *  Have the usual crud methods
      */
-    public PayrollRecordDto createPayrollRecord(PayrollRecord record) {
-        payrollRecordRepository.save(record);
-        return payrollMapper.toDto(payrollRecordRepository.findById(record.getId()).isPresent() ? record : null);
+    public PayrollRecordDto createPayrollRecord(PayrollRecordCreateDto createDto) {
+        PayrollPeriod period = periodRepository.findById(createDto.getPeriodId()).orElseThrow(
+                () -> new NoSuchElementException("No period found for id: " + createDto.getPeriodId())
+        );
+        Employee employee = employeeRepository.findById(createDto.getEmployeeId()).orElseThrow(
+                () -> new NoSuchElementException("No employee found for id: " + createDto.getEmployeeId())
+        );
+        PayrollRecord created = new PayrollRecord();
+        created.setPeriod(period);
+        created.setEmployee(employee);
+        created.setGrossPay(createDto.getGrossPay());
+        created.setPaymentDate(createDto.getPaymentDate());
+        created.setNotes(created.getNotes());
+        created.setAllowanceList(new ArrayList<>());
+        created.setDeductionList(new ArrayList<>());
+
+        // get allowance and deductions related to the
+
+        return payrollMapper.toDto(payrollRecordRepository.save(created));
     }
 
-    public PayrollRecordDto getPayrollRecordById(Long id) {
-        return payrollMapper.toDto(payrollRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No payroll record found for id: " + id)));
+//    public PayrollRecordDto getPayrollRecordById(Long id) {
+//        PayrollRecordDto recordDto = payrollMapper.toDto(payrollRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No payroll record found for id: " + id)));
+//        recordDto.setTotalDeductions(recordDto.getDeductions().stream().map(DeductionDto::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add));
+//        recordDto.setTotalAllowances(recordDto.getAllowances().stream().map(AllowanceDto::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add));
+//        return recordDto;
+//    }
+
+    public PayrollRecord getPayrollRecordById(Long id) {
+//        PayrollRecordDto recordDto = payrollMapper.toDto(payrollRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No payroll record found for id: " + id)));
+        //        recordDto.setTotalDedductions(recordDto.getDeductions().stream().map(DeductionDto::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add));
+//        recordDto.setTotalAllowances(recordDto.getAllowances().stream().map(AllowanceDto::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add));
+        return payrollRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No payroll record found for id: " + id));
     }
 
     public List<PayrollRecordDto> getAllPayrollRecords() {
@@ -82,21 +115,38 @@ public class PayrollRecordService {
     }
 
 
-//    public PayrollRecordDto updatePayrollRecord(Long id, PayrollRecordDto updatedPayrollRecord) {
-//        PayrollRecord update = repository.findById(id)
-//                .map(payroll -> {
-//                    payroll.setEmployee(updatedPayrollRecord.getEmployee());
-//                    return payroll;
-//
-//                });
-//    }
+    public PayrollRecord updatePayrollRecord(Long id, PayrollRecord updatedPayrollRecord) {
+        PayrollRecord existingRecord =
+                payrollRecordRepository.findById(id)
+                        .orElseThrow(() -> new NoSuchElementException("Record not found for id: " + id));
+
+        // update every property
+        existingRecord.setEmployee(updatedPayrollRecord.getEmployee());
+        existingRecord.setPeriod(updatedPayrollRecord.getPeriod());
+        existingRecord.setGrossPay(updatedPayrollRecord.getGrossPay());
+
+        existingRecord.setNetPay(
+                updatedPayrollRecord.getGrossPay()
+                        .add(calculateTotalAllowances(updatedPayrollRecord.getAllowanceList()))
+                        .subtract(calculateTotalDeductions(updatedPayrollRecord.getDeductionList())));
+
+        existingRecord.setPaymentDate(updatedPayrollRecord.getPaymentDate());
+        existingRecord.setNotes(updatedPayrollRecord.getNotes());
+        payrollRecordRepository.save(existingRecord);
+        return existingRecord;
+    }
 
     public void deletePayrollRecordById(Long id) {
         payrollRecordRepository.deleteById(id);
     }
 
-
-
     // method of calculating total of allowance and deductions
+    private BigDecimal calculateTotalDeductions(List<Deduction> deductions) {
+        return deductions.stream().map(Deduction::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal calculateTotalAllowances(List<Allowance> allowances) {
+        return allowances.stream().map(Allowance::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 
 }

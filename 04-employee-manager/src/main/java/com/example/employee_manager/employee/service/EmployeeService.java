@@ -43,7 +43,7 @@ public class EmployeeService {
         Employee updated = repository.findById(id)
                 .map(employee -> {
                     employee.setName(updatedEmployee.getName());
-                    employee.setDate_hired(LocalDate.parse(updatedEmployee.getDateHired(), DateTimeFormatter.ISO_LOCAL_DATE));
+                    employee.setDate_hired(updatedEmployee.getDateHired());
                     employee.setPosition(updatedEmployee.getPosition());
                     employee.setActive(updatedEmployee.isActive());
                     return employee;

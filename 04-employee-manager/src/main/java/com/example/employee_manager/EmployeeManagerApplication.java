@@ -48,7 +48,11 @@ public class EmployeeManagerApplication {
  *
  * 	Problem : Must return a list, the current implementation is returning the first one it can find						__SOLVED__
  * 	Task : getPayrollRecordsByPeriod must return a dto that is appropriate for a summary								__SOLVED__
- *  Problem : Implement getting records by Employee
+ *  Task : Implement getting records by Employee																		__SOLVED__
  *
- *
+ *    ************************************************
+ *	 *			Implementing PUT methods			*
+ *	************************************************
+ *	[x] TODO : Be able to generate payroll records
+ *  [ ]	TODO : add deduction and allowances to calculate net pay
  */

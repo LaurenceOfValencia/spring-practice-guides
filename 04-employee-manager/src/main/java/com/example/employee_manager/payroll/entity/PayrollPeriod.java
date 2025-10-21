@@ -1,6 +1,8 @@
 package com.example.employee_manager.payroll.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -32,7 +34,6 @@ public class PayrollPeriod {
     private Status status;
 
     @OneToMany(mappedBy = "id")
-    @JsonIgnore
     private List<PayrollRecord> payrollRecords;
 
     public enum Status {

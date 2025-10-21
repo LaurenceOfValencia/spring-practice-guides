@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class EmployeeCreateDto {
 
     private String name;
-    private String dateHired;
+    private LocalDate dateHired;
     private String position;
     private boolean active;
 
@@ -19,11 +19,11 @@ public class EmployeeCreateDto {
         this.name = name;
     }
 
-    public String getDateHired() {
+    public LocalDate getDateHired() {
         return dateHired;
     }
 
-    public void setDateHired(String dateHired) {
+    public void setDateHired(LocalDate dateHired) {
         this.dateHired = dateHired;
     }
 

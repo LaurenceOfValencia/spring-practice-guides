@@ -24,6 +24,7 @@ public class PayrollRecordMapper {
             return null;
         }
         PayrollRecordDto dto = new PayrollRecordDto();
+        dto.setId(record.getId());
         dto.setEmployee(record.getEmployee().getName());
         // How would I handle the payroll period here?
         dto.setPeriod(periodMapper.toDto(record.getPeriod()));

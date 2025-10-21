@@ -26,7 +26,7 @@ CREATE TABLE payroll_records (
     period_id INT NOT NULL,
     employee_id INT NOT NULL,
     gross_pay DECIMAL(10, 2) NOT NULL,
-    net_pay DECIMAL(10,2) NOT NULL,
+    net_pay DECIMAL(10,2) NULL,
     payment_date DATE NOT NULL,
     notes VARCHAR(255) NULL,
     PRIMARY KEY (id),

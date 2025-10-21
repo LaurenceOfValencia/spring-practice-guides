@@ -1,7 +1,9 @@
 package com.example.employee_manager.payroll.entity;
 
 import com.example.employee_manager.employee.entity.Employee;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -16,21 +18,21 @@ public class PayrollRecord {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "period_id")
-    @JsonIgnore
+    @JoinColumn(name = "period_id", referencedColumnName = "id")
+    @JsonBackReference
     private PayrollPeriod period;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
-    @JsonIgnore
+    @JsonBackReference
     private Employee employee;
 
     @OneToMany(mappedBy = "payrollRecord", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference
     private List<Allowance> allowanceList;
 
     @OneToMany(mappedBy = "payrollRecord", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference
     private List<Deduction> deductionList;
 
     private BigDecimal grossPay;

@@ -12,6 +12,7 @@ import java.util.List;
 
 public class PayrollRecordDto {
 
+    private long id;
     private String employee;
     private PayrollPeriodDto period;
     private BigDecimal grossPay;
@@ -25,6 +26,14 @@ public class PayrollRecordDto {
 
     private BigDecimal totalDeductions;
     private BigDecimal totalAllowances;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getEmployee() {
         return employee;
