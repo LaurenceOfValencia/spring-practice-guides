@@ -12,7 +12,6 @@ public class AllowanceMapper {
             return null;
         }
         AllowanceDto dto = new AllowanceDto();
-        dto.setRecordId(allowance.getPayrollRecord().getId()); // references the parent payroll
         dto.setName(allowance.getName());
         dto.setAmount(allowance.getAmount());
         return dto;

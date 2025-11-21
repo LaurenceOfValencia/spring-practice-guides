@@ -54,5 +54,7 @@ public class EmployeeManagerApplication {
  *	 *			Implementing PUT methods			*
  *	************************************************
  *	[x] TODO : Be able to generate payroll records
- *  [ ]	TODO : add deduction and allowances to calculate net pay
+ *  [x]	TODO : add deduction and allowances to calculate net pay
+ *  [x] TODO : Use proper mock data
+ *  [ ] TODO : Use thymeleaf to bind frontend and backend
  */

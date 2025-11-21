@@ -20,12 +20,10 @@ public class PayrollRecordDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate paymentDate;
     private String notes;
-
-    private List<DeductionDto> deductions = new ArrayList<>();
     private List<AllowanceDto> allowances = new ArrayList<>();
-
-    private BigDecimal totalDeductions;
+    private List<DeductionDto> deductions = new ArrayList<>();
     private BigDecimal totalAllowances;
+    private BigDecimal totalDeductions;
 
     public long getId() {
         return id;

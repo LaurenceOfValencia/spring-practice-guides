@@ -19,20 +19,20 @@ public class PayrollRecord {
 
     @ManyToOne
     @JoinColumn(name = "period_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonIgnore
     private PayrollPeriod period;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
-    @JsonBackReference
+    @JsonIgnore
     private Employee employee;
 
     @OneToMany(mappedBy = "payrollRecord", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Allowance> allowanceList;
 
     @OneToMany(mappedBy = "payrollRecord", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Deduction> deductionList;
 
     private BigDecimal grossPay;
@@ -133,4 +133,5 @@ public class PayrollRecord {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
 }

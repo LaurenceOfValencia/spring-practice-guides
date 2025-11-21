@@ -9,6 +9,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface AllowanceRepository extends JpaRepository<Allowance, Long> {
-    List<Allowance> findByPayrollRecordId(Long payrollRecordId);
+    List<Allowance> findByPayrollRecord_Id(Long payrollRecordId);
 
 }

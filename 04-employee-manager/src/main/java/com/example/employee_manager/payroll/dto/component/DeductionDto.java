@@ -3,17 +3,17 @@ package com.example.employee_manager.payroll.dto.component;
 import java.math.BigDecimal;
 
 public class DeductionDto {
-    private Long recordId; // reference to parent payroll record
+//    private Long recordId; // reference to parent payroll record
     private String name;
     private BigDecimal amount;
 
-    public Long getRecordId() {
-        return recordId;
-    }
-
-    public void setRecordId(Long recordId) {
-        this.recordId = recordId;
-    }
+//    public Long getRecordId() {
+//        return recordId;
+//    }
+//
+//    public void setRecordId(Long recordId) {
+//        this.recordId = recordId;
+//    }
 
     public String getName() {
         return name;

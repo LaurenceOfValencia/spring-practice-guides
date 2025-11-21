@@ -36,4 +36,18 @@ public class PayrollRecordMapper {
         dto.setDeductions(record.getDeductionList().stream().map(deductionMapper::toDto).toList());
         return dto;
     }
+
+    public PayrollRecord toEntity(PayrollRecordDto dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        // id, employee, period, allowance and deductions will be set in service layer
+        PayrollRecord entity =  new PayrollRecord();
+        entity.setGrossPay(dto.getGrossPay());
+        entity.setNetPay(dto.getNetPay());
+        entity.setPaymentDate(dto.getPaymentDate());
+        entity.setNotes(dto.getNotes());
+        return entity;
+    }
 }

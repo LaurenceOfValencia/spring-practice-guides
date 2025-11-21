@@ -14,7 +14,6 @@ public class DeductionMapper {
             return null;
         }
         DeductionDto dto = new DeductionDto();
-        dto.setRecordId(deduction.getPayrollRecord().getId()); // references the parent payroll
         dto.setName(deduction.getName());
         dto.setAmount(deduction.getAmount());
         return dto;

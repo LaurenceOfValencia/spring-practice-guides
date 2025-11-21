@@ -12,8 +12,7 @@ import com.example.employee_manager.payroll.entity.Allowance;
 import com.example.employee_manager.payroll.entity.Deduction;
 import com.example.employee_manager.payroll.entity.PayrollPeriod;
 import com.example.employee_manager.payroll.entity.PayrollRecord;
-import com.example.employee_manager.payroll.mapper.PayrollRecordMapper;
-import com.example.employee_manager.payroll.mapper.PayrollSummaryMapper;
+import com.example.employee_manager.payroll.mapper.*;
 import com.example.employee_manager.payroll.repository.PayrollPeriodRepository;
 import com.example.employee_manager.payroll.repository.PayrollRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +27,26 @@ import java.util.NoSuchElementException;
 @Service
 public class PayrollRecordService {
     @Autowired
+    PayrollPeriodMapper periodMapper;
+    @Autowired
     PayrollRecordMapper payrollMapper;
     @Autowired
     PayrollSummaryMapper payrollSummaryMapper;
+    @Autowired
+    AllowanceMapper allowanceMapper;
+    @Autowired
+    DeductionMapper deductionMapper;
+
     @Autowired
     PayrollRecordRepository payrollRecordRepository;
     @Autowired
     EmployeeRepository employeeRepository;
     @Autowired
     PayrollPeriodRepository periodRepository;
-    /**
-     *  Have the usual crud methods
-     */
+
+    @Autowired
+    AllowanceService allowanceService;
+
     public PayrollRecordDto createPayrollRecord(PayrollRecordCreateDto createDto) {
         PayrollPeriod period = periodRepository.findById(createDto.getPeriodId()).orElseThrow(
                 () -> new NoSuchElementException("No period found for id: " + createDto.getPeriodId())
@@ -47,18 +54,32 @@ public class PayrollRecordService {
         Employee employee = employeeRepository.findById(createDto.getEmployeeId()).orElseThrow(
                 () -> new NoSuchElementException("No employee found for id: " + createDto.getEmployeeId())
         );
-        PayrollRecord created = new PayrollRecord();
+        PayrollRecord created = new PayrollRecord();                                                                    // create new entity
         created.setPeriod(period);
         created.setEmployee(employee);
         created.setGrossPay(createDto.getGrossPay());
         created.setPaymentDate(createDto.getPaymentDate());
-        created.setNotes(created.getNotes());
-        created.setAllowanceList(new ArrayList<>());
-        created.setDeductionList(new ArrayList<>());
-
-        // get allowance and deductions related to the
-
-        return payrollMapper.toDto(payrollRecordRepository.save(created));
+        created.setNotes(createDto.getNotes());
+        List<Allowance> allowances = createDto.getAllowances().stream().map(dto -> {                        // sets each allowance/deduction to it's
+            Allowance allowance = allowanceMapper.toEntity(dto);                                                        // corresponding payroll record
+            allowance.setPayrollRecord(created);
+            return allowance;
+        }).toList();
+        List<Deduction> deductions = createDto.getDeductions().stream().map(dto -> {
+            Deduction deduction = deductionMapper.toEntity(dto);
+            deduction.setPayrollRecord(created);
+            return deduction;
+        }).toList();
+        created.setAllowanceList(allowances);
+        created.setDeductionList(deductions);
+        BigDecimal netPay = created.getGrossPay()                                                                       // calculate net pay
+                .add(calculateTotalAllowances(created.getAllowanceList()))
+                .subtract(calculateTotalDeductions(created.getDeductionList()));
+        created.setNetPay(netPay);
+        PayrollRecordDto dto = payrollMapper.toDto(payrollRecordRepository.save(created));
+        dto.setTotalAllowances(calculateTotalAllowances(created.getAllowanceList()));
+        dto.setTotalDeductions(calculateTotalDeductions(created.getDeductionList()));
+        return dto;
     }
 
 //    public PayrollRecordDto getPayrollRecordById(Long id) {
@@ -68,6 +89,9 @@ public class PayrollRecordService {
 //        return recordDto;
 //    }
 
+    /**
+     * [ ] TODO: make the get method return a dto
+     */
     public PayrollRecord getPayrollRecordById(Long id) {
 //        PayrollRecordDto recordDto = payrollMapper.toDto(payrollRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No payroll record found for id: " + id)));
         //        recordDto.setTotalDedductions(recordDto.getDeductions().stream().map(DeductionDto::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add));
@@ -98,9 +122,7 @@ public class PayrollRecordService {
         return payrollSummaryMapper.toDtoPeriodSummary(period, records);
     }
 
-    /**
-     * find by employee
-     */
+    /** find by employee **/
 
     public List<PayrollRecordDto> getPayrollRecordsByEmployee(Long id) {
         return payrollRecordRepository.findByEmployeeId(id)
@@ -140,7 +162,7 @@ public class PayrollRecordService {
         payrollRecordRepository.deleteById(id);
     }
 
-    // method of calculating total of allowance and deductions
+    /** method of calculating total of allowance and deductions **/
     private BigDecimal calculateTotalDeductions(List<Deduction> deductions) {
         return deductions.stream().map(Deduction::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
